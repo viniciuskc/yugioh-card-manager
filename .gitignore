@@ -1,6 +1,7 @@
 bin/
 data/
-image/
+fonts/
+images/
 lib/
 .idea
 pyvenv.cfg
