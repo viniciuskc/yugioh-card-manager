@@ -3,5 +3,7 @@ data/
 fonts/
 images/
 lib/
+src/__pycache__
+.DS_STORE
 .idea
 pyvenv.cfg
