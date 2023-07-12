@@ -1,6 +1,7 @@
 from json import dumps, loads
-import api
-import params
+
+
+# TODO: File not working, finish refactoring the api definitions and then refactor methods in this file
 
 
 def search_card_details(response):
@@ -18,10 +19,10 @@ def search_card_details(response):
 def search_card():
     """Executes the Yu-Gi-Oh! Card search flow and returns a json response."""
 
-    empty_parameters = params.params_get_card_info
-    valid_parameters = params.fill_params(empty_parameters, 6)
+    empty_parameters = parameters.params_get_card_info
+    valid_parameters = parameters.fill_params(empty_parameters, 6)
 
-    response = api.get_card_info(params=valid_parameters)
+    response = api.get_card_info.request(params=valid_parameters)
     response_count = len(loads(response)["data"])
     print(f"\nSearch returned {response_count} results:")
 
@@ -42,10 +43,10 @@ def search_card():
 def search_card_set():
     """Executes the Yu-Gi-Oh! Card Set search flow."""
 
-    empty_parameters = params.params_get_card_set_info
-    valid_parameters = params.fill_params(empty_parameters, 1)
+    empty_parameters = parameters.params_get_card_set_info
+    valid_parameters = parameters.fill_params(empty_parameters, 1)
 
-    response = api.get_card_set_info(params=valid_parameters)
+    response = api.get_card_set_info.request(params=valid_parameters)
 
     print("\nResponse:\n" + dumps(loads(response), indent=2))
 
@@ -54,7 +55,7 @@ def search_random_card():
     """Executes the Yu-Gi-Oh! Card random search flow and saves the images from the result in the local images
     folder."""
 
-    response = api.get_random_card()
+    response = api.get_random_card.request()
     print("\nResponse:\n" + dumps(loads(response), indent=2))
 
     return response

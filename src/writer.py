@@ -4,8 +4,8 @@ from json import loads
 from os import makedirs, path
 from requests import get
 from shutil import copyfileobj
+from src.api.definition import folder_full_size_images, folder_small_size_images, folder_cropped_image_art
 from time import time, sleep
-import api
 import schemas
 
 folder_name_data = "data/"
@@ -108,7 +108,7 @@ def save_data_in_csv(json_response, file_name, folder_name=folder_name_data):
 def save_image_files(image_url_dict, folder_name=folder_name_images):
     """Saves all images from the url dictionary in the specified folder, naming them by the card id."""
 
-    image_folders = [api.folder_full_size_images, api.folder_small_size_images, api.folder_cropped_image_art]
+    image_folders = [folder_full_size_images, folder_small_size_images, folder_cropped_image_art]
 
     print("\nSaving image files locally...")
     for folder in image_folders:

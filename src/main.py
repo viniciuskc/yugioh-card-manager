@@ -1,5 +1,5 @@
 from os import system
-import api
+from src.api.definition import get_images_dict
 import search
 import writer
 
@@ -41,7 +41,7 @@ def menu_search():
 
         case "3":
             response = search.search_random_card()
-            images_dict = api.images_url_dict(response)
+            images_dict = get_images_dict(response)
             writer.save_image_files(images_dict)
             valid_search = True
 
@@ -81,14 +81,14 @@ def menu_select(response):
             valid_select = True
 
         case "3":
-            images_dict = api.images_url_dict(response)
+            images_dict = get_images_dict(response)
             writer.save_image_files(images_dict)
             valid_select = True
 
         case "4":
             writer.save_data_in_csv(response, "collection")
             # TODO: Save only images of cards with quantity > 0
-            images_dict = api.images_url_dict(response)
+            images_dict = get_images_dict(response)
             writer.save_image_files(images_dict)
             valid_select = True
 
