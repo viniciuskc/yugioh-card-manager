@@ -6,7 +6,7 @@ from requests import get
 from shutil import copyfileobj
 from src.api.definition import folder_full_size_images, folder_small_size_images, folder_cropped_image_art
 from time import time, sleep
-import schemas
+from src.data import datasets
 
 folder_name_data = "data/"
 folder_name_images = "images/"

@@ -84,6 +84,26 @@ class Parameter:
         return self.__name
 
     @property
+    def data_type(self):
+        return self.__data_type
+
+    @property
+    def description(self):
+        return self.__description
+
+    @property
+    def mandatory(self):
+        return self.__mandatory
+
+    @property
+    def options(self):
+        return self.__options
+
+    @property
+    def multi_selection(self):
+        return self.__multi_selection
+
+    @property
     def value(self):
         return self.__value
 

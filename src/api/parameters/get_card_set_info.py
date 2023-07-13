@@ -8,6 +8,5 @@ params = [
                   value="LDK2-ENJ41")
 ]
 
-
 if __name__ == '__main__':
     pass
