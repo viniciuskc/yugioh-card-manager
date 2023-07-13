@@ -48,9 +48,8 @@ class Api:
     def parameters(self):
         """Returns a list with the name of all endpoints in the request."""
 
-        parameters_list = []
-
         if self.__parameters is not None:
+            parameters_list = []
             for parameter in self.__parameters:
                 parameters_list += [parameter.name]
             parameters_list.sort()
@@ -62,32 +61,43 @@ class Api:
     def filled_parameters(self):
         """Returns a dict with endpoints that have non-null values."""
 
-        parameters_dict = dict()
-        for parameter in self.__parameters:
-            if parameter.value is not None:
-                parameters_dict[parameter.name] = parameter.value
+        if self.__parameters is not None:
+            parameters_dict = dict()
+            for parameter in self.__parameters:
+                if parameter.value is not None:
+                    parameters_dict[parameter.name] = parameter.value
+        else:
+            parameters_dict = None
+
         return parameters_dict
 
     # TODO: Implement try/except on API requests
-    def request(self, parameters=None):
+    def request(self):
         """Call the API using the API uri and the provided headers and endpoints, returning the response decoded in
         UTF-8."""
 
-        if parameters is None:
-            parameters = self.parameters()
-
-        url = self.uri() + "?" + urlencode(parameters)
-        request = Request(url, headers=self.__headers)
+        request = Request(self.url(), headers=self.__headers)
         response = urlopen(request).read().decode("utf-8")
 
         return response
 
     def uri(self):
-        """Construct and return the uri using the API endpoints."""
+        """Construct and return the URI of the API endpoint."""
 
         urn = "/".join([self.__domain, self.__app_context, self.__version, self.__resource])
 
         return self.__protocol + urn
+
+    def url(self):
+        """Construct and return the URL of the API request."""
+
+        if self.__parameters is None:
+            url = self.uri()
+        else:
+            parameters = self.filled_parameters()
+            url = self.uri() + "?" + urlencode(parameters)
+
+        return url
 
 
 class Parameter:
