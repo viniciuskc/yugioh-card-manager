@@ -3,6 +3,8 @@ from math import floor
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+# Yu-Gi-Oh! API Official Doc: https://ygoprodeck.com/api-guide/
+
 default_protocol = "https://"
 default_domain = "db.ygoprodeck.com"
 default_app_context = "api"
@@ -35,20 +37,40 @@ class Api:
         self.__headers = headers
         self.__parameters = parameters
 
+    @property
+    def method(self):
+        return self.__method
+
+    @property
+    def version(self):
+        return self.__version
+
     def parameters(self):
-        """Returns a dict with parameters that have non-null values."""
+        """Returns a list with the name of all endpoints in the request."""
+
+        parameters_list = []
+
+        if self.__parameters is not None:
+            for parameter in self.__parameters:
+                parameters_list += [parameter.name]
+            parameters_list.sort()
+        else:
+            parameters_list = None
+
+        return parameters_list
+
+    def filled_parameters(self):
+        """Returns a dict with endpoints that have non-null values."""
 
         parameters_dict = dict()
-
         for parameter in self.__parameters:
             if parameter.value is not None:
                 parameters_dict[parameter.name] = parameter.value
-
         return parameters_dict
 
     # TODO: Implement try/except on API requests
     def request(self, parameters=None):
-        """Call the API using the API uri and the provided headers and parameters, returning the response decoded in
+        """Call the API using the API uri and the provided headers and endpoints, returning the response decoded in
         UTF-8."""
 
         if parameters is None:
@@ -61,7 +83,7 @@ class Api:
         return response
 
     def uri(self):
-        """Construct and return the uri using the API parameters."""
+        """Construct and return the uri using the API endpoints."""
 
         urn = "/".join([self.__domain, self.__app_context, self.__version, self.__resource])
 
@@ -112,7 +134,7 @@ class Parameter:
         self.__value = value
     # TODO: In the user's input, when Enter is pressed without a typed text, set value to None (delete the value)
 
-    # TODO: Create methods to validate the data_type and options selected of the filled parameters
+    # TODO: Create methods to validate the data_type and options selected of the filled endpoints
 
 
 # TODO: Refactor images dict inside a class
@@ -163,7 +185,7 @@ def fill_params(params_dict, columns=1):
 
     while not exit_fill:
         print_params(params_dict, columns)
-        print("Filled search parameters: " + str(get_valid_params(params_dict)) +
+        print("Filled search endpoints: " + str(get_valid_params(params_dict)) +
               "\n\nPress [Enter] to search or enter a field name to fill in.")
 
         param_input = input(f"> ")
@@ -193,7 +215,7 @@ def get_valid_params(params):
 
 
 def print_params(params_dict, columns=1):
-    """Receives a dictionary of parameters and prints its keys tabulated in the specified number of columns."""
+    """Receives a dictionary of endpoints and prints its keys tabulated in the specified number of columns."""
 
     print("\nThis API allows to search for a card filtering by the following fields:")
 
