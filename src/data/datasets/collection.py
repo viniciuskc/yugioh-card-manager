@@ -1,6 +1,6 @@
 from src.data.data import Column, Dataset
 
-dataset = Dataset(
+collection = Dataset(
     name="collection",
     write_mode="overwrite",
     description="Yu-Gi-Oh! card collection information.",
@@ -15,8 +15,8 @@ dataset = Dataset(
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", dataset.name)
-    print("Description:", dataset.description)
-    print("Write Mode:", dataset.write_mode)
-    print("Primary Keys:", str(dataset.primary_keys()))
-    print("Columns:", str(dataset.columns()))
+    print("Dataset Name:", collection.name)
+    print("Description:", collection.description)
+    print("Write Mode:", collection.write_mode)
+    print("Primary Keys:", str(collection.primary_keys()))
+    print("Columns:", str(collection.columns()))

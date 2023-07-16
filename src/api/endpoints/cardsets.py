@@ -1,14 +1,14 @@
 from src.api.api import Api
 
-api = Api(method="get", resource="cardsets.php")
+card_sets = Api(method="get", resource="cardsets.php")
 
 if __name__ == '__main__':
     print("------------------------------------------------------------")
-    print("Method:", api.method)
-    print("Version:", api.version)
-    print("URI:", api.uri())
-    print("All Parameters:", str(api.parameters()))
+    print("Method:", card_sets.method)
+    print("Version:", card_sets.version)
+    print("URI:", card_sets.uri())
+    print("All Parameters:", str(card_sets.parameters()))
     print("------------------------------------------------------------")
-    print("Parameters:", str(api.filled_parameters()))
-    print("Endpoint:", api.url())
-    # print("Response:", api.request())
+    print("Parameters:", str(card_sets.filled_parameters()))
+    print("Endpoint:", card_sets.url())
+    # print("Response:", card_sets.request())

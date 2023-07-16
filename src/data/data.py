@@ -2,7 +2,7 @@ from collections import abc
 from csv import DictWriter
 from datetime import datetime
 from json import loads
-from src.writer import files
+from src.files import files
 from time import time
 
 csv_default_folder_name = "data/csv/"

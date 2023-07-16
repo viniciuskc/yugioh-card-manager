@@ -1,4 +1,4 @@
-from os import system
+from files import system
 from src.api.api import get_images_dict
 import search
 

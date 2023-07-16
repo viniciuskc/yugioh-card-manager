@@ -1,6 +1,6 @@
 from src.data.data import Column, Dataset
 
-dataset = Dataset(
+image = Dataset(
     name="image",
     write_mode="overwrite",
     description="Yu-Gi-Oh! card images links.",
@@ -14,8 +14,8 @@ dataset = Dataset(
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", dataset.name)
-    print("Description:", dataset.description)
-    print("Write Mode:", dataset.write_mode)
-    print("Primary Keys:", str(dataset.primary_keys()))
-    print("Columns:", str(dataset.columns()))
+    print("Dataset Name:", image.name)
+    print("Description:", image.description)
+    print("Write Mode:", image.write_mode)
+    print("Primary Keys:", str(image.primary_keys()))
+    print("Columns:", str(image.columns()))

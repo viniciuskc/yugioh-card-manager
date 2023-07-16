@@ -1,6 +1,6 @@
 from src.data.data import Column, Dataset
 
-dataset = Dataset(
+banlist = Dataset(
     name="banlist",
     write_mode="overwrite",
     description="Yu-Gi-Oh! banlist information.",
@@ -15,8 +15,8 @@ dataset = Dataset(
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", dataset.name)
-    print("Description:", dataset.description)
-    print("Write Mode:", dataset.write_mode)
-    print("Primary Keys:", str(dataset.primary_keys()))
-    print("Columns:", str(dataset.columns()))
+    print("Dataset Name:", banlist.name)
+    print("Description:", banlist.description)
+    print("Write Mode:", banlist.write_mode)
+    print("Primary Keys:", str(banlist.primary_keys()))
+    print("Columns:", str(banlist.columns()))
