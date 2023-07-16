@@ -36,7 +36,7 @@ card.save_json(api_response_2)
 images.save_images(api_response_2)
 card_info.reset_parameters()
 print("----------------------------------------------------------------------------------------------------")
-card_archetype = "Red-Eyes"
+card_archetype.value = "Red-Eyes"
 card_type.value = "XYZ Monster"
 card_race.value = "Dragon"
 card_atk.value = "2800"
