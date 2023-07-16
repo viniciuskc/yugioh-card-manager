@@ -1,9 +1,9 @@
-bin/
-data/
-fonts/
-images/
-lib/
-*__pycache__
+/bin/
+/data/
+/fonts/
+/images/
+/lib/
+__pycache__
 *.DS_STORE
 .idea
 pyvenv.cfg

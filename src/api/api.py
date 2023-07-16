@@ -1,6 +1,7 @@
-# from math import floor
+from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from time import sleep
 
 # Yu-Gi-Oh! API Official Doc: https://ygoprodeck.com/api-guide/
 
@@ -10,14 +11,6 @@ default_app_context = "api"
 default_version = "v7"
 
 default_headers = {'User-Agent': 'Mozilla/6.0'}
-
-folder_full_size_images = "cards"
-folder_small_size_images = "cards_small"
-folder_cropped_image_art = "cards_cropped"
-
-key_full_size_images = "image_url"
-key_small_size_images = "image_url_small"
-key_cropped_image_art = "image_url_cropped"
 
 
 class Api:
@@ -45,7 +38,7 @@ class Api:
         return self.__version
 
     def parameters(self):
-        """Returns a list with the name of all endpoints in the request."""
+        """Returns a list with the name of all parameters of the endpoint."""
 
         if self.__parameters is not None:
             parameters_list = []
@@ -70,13 +63,37 @@ class Api:
 
         return parameters_dict
 
-    # TODO: Implement try/except on API requests
+    def reset_parameters(self):
+        """Sets all parameters to None or with their default value, if a default value is configured."""
+
+        if self.__parameters is not None:
+            parameters_dict = dict()
+            for parameter in self.__parameters:
+                parameter.reset_value()
+        else:
+            parameters_dict = None
+
+        return parameters_dict
+
     def request(self):
         """Call the API using the API uri and the provided headers and endpoints, returning the response decoded in
         UTF-8."""
 
         request = Request(self.url(), headers=self.__headers)
-        response = urlopen(request).read().decode("utf-8")
+
+        try:
+            response = urlopen(request).read().decode("utf-8")
+        except HTTPError as error:
+            response = None
+            print('Status:', error.code, error.reason)
+            print("Error:", error.read().decode("utf-8"))
+        except URLError as error:
+            response = None
+            print('Reason:', error.reason)
+        else:
+            print('Status: 200 OK')
+
+        sleep(0.1)
 
         return response
 
@@ -101,14 +118,15 @@ class Api:
 
 class Parameter:
     def __init__(self, name, data_type, description=None, mandatory=False, options=None, multi_selection=False,
-                 value=None):
+                 default_value=None):
         self.__name = name
         self.__data_type = data_type
         self.__description = description
         self.__mandatory = mandatory
         self.__options = options
         self.__multi_selection = multi_selection
-        self.__value = value
+        self.__default_value = default_value
+        self.__value = default_value
 
     @property
     def name(self):
@@ -135,12 +153,22 @@ class Parameter:
         return self.__multi_selection
 
     @property
+    def default_value(self):
+        return self.__default_value
+
+    @property
     def value(self):
         return self.__value
 
     @value.setter
     def value(self, value):
         self.__value = value
+
+    def reset_value(self):
+        if self.__default_value is not None:
+            self.value = self.__default_value
+        else:
+            self.value = None
     # TODO: In the user's input, when Enter is pressed without a typed text, set value to None (delete the value)
 
     # TODO: Create methods to validate the data_type and options selected of the filled endpoints

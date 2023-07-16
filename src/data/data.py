@@ -1,7 +1,7 @@
 from collections import abc
-from csv import DictWriter
 from datetime import datetime
 from json import loads
+from pandas import DataFrame
 from src.files import files
 from time import time
 
@@ -111,7 +111,11 @@ class Dataset:
 
         columns_alias = self.columns_alias()
 
-        json_response = loads(response)
+        if response is not None:
+            json_response = loads(response)
+        else:
+            return None
+
         if "data" not in json_response.keys():
             json_response = {"data": [json_response]}
 
@@ -149,6 +153,7 @@ class Dataset:
 
         return data
 
+    # TODO: Add treatment to overwrite cards that already exist in csv by card id
     def save_csv(self, response, folder_name=csv_default_folder_name):
         """Saves the data from the provided response in a csv file."""
 
@@ -157,48 +162,52 @@ class Dataset:
         folder_path = files.make_folder(folder_name)
         file_path = folder_path + self.__name + ".csv"
 
-        headers = self.columns()
-
         csv_formats = [".csv"]
 
-        print(f"Saving data in csv file locally...")
-        if files.file_exists(folder_path, self.__name, csv_formats, add_abs_path=False):
-            with open(file_path, "a") as file:
-                writer = DictWriter(file, fieldnames=headers)
-                writer.writerows(data)
+        if data is not None:
+            print(f"Saving data in csv file locally...")
+            if files.file_exists(folder_path, self.__name, csv_formats, add_abs_path=False):
+                df = DataFrame.from_records(data)
+                df.to_csv(file_path, mode="a", index=False, header=False)
                 mode_text = "Data appended in csv: "
-        else:
-            with open(file_path, "w") as file:
-                writer = DictWriter(file, fieldnames=headers)
-                writer.writeheader()
-                writer.writerows(data)
+            else:
+                df = DataFrame.from_records(data)
+                df.to_csv(file_path, mode="w", index=False)
                 mode_text = "Csv saved locally as: "
 
-        return_text = mode_text + file_path
-        print(return_text)
+            return_text = mode_text + file_path
+            print(return_text)
 
+        else:
+            print("No response data to be saved in the csv file.")
+
+    # TODO: Add treatment to overwrite cards that already exist in json by card id
     def save_json(self, response, folder_name=json_default_folder_name):
         """Saves the data from the provided response in a json file."""
 
         data = self.parse_response(response)
 
         folder_path = files.make_folder(folder_name)
-        json_file_name = folder_path + self.__name + ".json"
+        file_path = folder_path + self.__name + ".json"
 
         json_formats = [".json"]
 
-        print("Saving json file locally...")
-        if files.file_exists(folder_path, self.__name, json_formats, add_abs_path=False):
-            file = open(json_file_name, "a")
-            file.write(str(data))
-            mode_text = "Data appended in json: "
-        else:
-            file = open(json_file_name, "w")
-            file.write(str(data))
-            mode_text = "Json saved locally as: "
+        if data is not None:
+            print("Saving json file locally...")
+            if files.file_exists(folder_path, self.__name, json_formats, add_abs_path=False):
+                df = DataFrame.from_records(data)
+                df.to_json(file_path, mode="a", lines=True, orient="records")
+                mode_text = "Data appended in json: "
+            else:
+                df = DataFrame.from_records(data)
+                df.to_json(file_path, mode="w", lines=True, orient="records")
+                mode_text = "Json saved locally as: "
 
-        return_text = mode_text + json_file_name
-        print(return_text)
+            return_text = mode_text + file_path
+            print(return_text)
+
+        else:
+            print("No response data to be saved in the json file.")
 
 
 if __name__ == '__main__':

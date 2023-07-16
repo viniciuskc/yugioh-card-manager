@@ -85,7 +85,7 @@ card_language = Parameter(
     data_type="string",
     description="Card language (None: English, 'FR': French, 'DE': German, 'IT': Italian, 'PT': Portuguese).",
     options=[None, "DE", "FR", "IT", "PT"],
-    value="PT"
+    default_value="PT"
 )
 
 card_level = Parameter(

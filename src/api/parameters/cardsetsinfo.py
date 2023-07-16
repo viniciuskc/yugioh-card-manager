@@ -5,7 +5,7 @@ set_code = Parameter(
     data_type="string",
     mandatory=True,
     description="Filter the cards by set code [e.g. 'SDY-046'].",
-    value="LDK2-ENJ41"
+    default_value="LDK2-ENJ41"
 )
 
 if __name__ == '__main__':
