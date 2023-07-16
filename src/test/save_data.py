@@ -5,11 +5,6 @@ from src.data import images
 
 print("")
 print("----------------------------------------------------------------------------------------------------")
-print("Dataset Name:", card.name)
-print("Description:", card.description)
-print("Primary Keys:", str(card.primary_keys()))
-print("Columns:", str(card.columns()))
-print("----------------------------------------------------------------------------------------------------")
 card_name.value = "Dragão Negro de Olhos Vermelhos"
 card_type.value = "Normal Monster"
 card_race.value = "Dragon"

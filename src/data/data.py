@@ -1,6 +1,8 @@
 from collections import abc
 from datetime import datetime
 from json import loads
+from os.path import exists
+
 from pandas import DataFrame
 from src.files import files
 from time import time
@@ -153,20 +155,34 @@ class Dataset:
 
         return data
 
+    def path(self, data_type, folder_name=None):
+        """Returns the path of the dataset in the specified format in local files. If a folder is not specified, it
+        returns the default path."""
+
+        default_types_folders = {"csv": csv_default_folder_name, "json": json_default_folder_name}
+
+        if data_type not in default_types_folders.keys():
+            raise ValueError("Invalid data type, valid types are:", ", ".join(default_types_folders.keys()))
+
+        if folder_name is None:
+            folder_path = files.make_folder(default_types_folders[data_type])
+        else:
+            folder_path = files.make_folder(folder_name)
+
+        file_path = folder_path + self.__name + "." + data_type
+
+        return file_path
+
     # TODO: Add treatment to overwrite cards that already exist in csv by card id
-    def save_csv(self, response, folder_name=csv_default_folder_name):
+    def save_csv(self, response, folder_name=None):
         """Saves the data from the provided response in a csv file."""
 
         data = self.parse_response(response)
-
-        folder_path = files.make_folder(folder_name)
-        file_path = folder_path + self.__name + ".csv"
-
-        csv_formats = [".csv"]
+        file_path = self.path("csv", folder_name)
 
         if data is not None:
             print(f"Saving data in csv file locally...")
-            if files.file_exists(folder_path, self.__name, csv_formats, add_abs_path=False):
+            if exists(file_path):
                 df = DataFrame.from_records(data)
                 df.to_csv(file_path, mode="a", index=False, header=False)
                 mode_text = "Data appended in csv: "
@@ -182,19 +198,15 @@ class Dataset:
             print("No response data to be saved in the csv file.")
 
     # TODO: Add treatment to overwrite cards that already exist in json by card id
-    def save_json(self, response, folder_name=json_default_folder_name):
+    def save_json(self, response, folder_name=None):
         """Saves the data from the provided response in a json file."""
 
         data = self.parse_response(response)
-
-        folder_path = files.make_folder(folder_name)
-        file_path = folder_path + self.__name + ".json"
-
-        json_formats = [".json"]
+        file_path = self.path("json", folder_name)
 
         if data is not None:
             print("Saving json file locally...")
-            if files.file_exists(folder_path, self.__name, json_formats, add_abs_path=False):
+            if exists(file_path):
                 df = DataFrame.from_records(data)
                 df.to_json(file_path, mode="a", lines=True, orient="records")
                 mode_text = "Data appended in json: "
