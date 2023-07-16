@@ -162,7 +162,7 @@ class Dataset:
         csv_formats = [".csv"]
 
         print(f"Saving data in csv file locally...")
-        if files.file_exists(folder_path, self.__name, csv_formats):
+        if files.file_exists(folder_path, self.__name, csv_formats, add_abs_path=False):
             with open(file_path, "a") as file:
                 writer = DictWriter(file, fieldnames=headers)
                 writer.writerows(data)
@@ -183,17 +183,21 @@ class Dataset:
         data = self.parse_response(response)
 
         folder_path = files.make_folder(folder_name)
+        json_file_name = folder_path + self.__name + ".json"
 
-        local_time = time()
-        local_datetime = datetime.fromtimestamp(local_time).strftime("%Y%m%d_%H%M%S")
-
-        json_file_name = folder_path + self.__name + local_datetime + ".json"
+        json_formats = [".json"]
 
         print("Saving json file locally...")
-        file = open(json_file_name, "w")
-        file.write(str(data))
+        if files.file_exists(folder_path, self.__name, json_formats, add_abs_path=False):
+            file = open(json_file_name, "a")
+            file.write(str(data))
+            mode_text = "Data appended in json: "
+        else:
+            file = open(json_file_name, "w")
+            file.write(str(data))
+            mode_text = "Json saved locally as: "
 
-        return_text = "Json saved locally as: " + json_file_name
+        return_text = mode_text + json_file_name
         print(return_text)
 
 

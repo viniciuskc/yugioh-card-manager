@@ -3,14 +3,18 @@ from os import getcwd, makedirs, pardir, path
 default_project_name = "yugioh-card-manager"
 
 
-def file_exists(folder_path, file_name, file_formats, project_name=default_project_name):
+def file_exists(folder_path, file_name, file_formats, project_name=default_project_name, add_abs_path=True):
     """Checks if there is any file with the given name in any of the specified formats in the given folder."""
 
     file_formats_exists = []
-    project_path = get_project_path(project_name)
+    if add_abs_path:
+        project_path = get_project_path(project_name)
+    else:
+        project_path = ""
 
     for file_format in file_formats:
-        exists = path.exists(project_path + folder_path + file_name + file_format)
+        file_path = project_path + folder_path + file_name + file_format
+        exists = path.exists(file_path)
         file_formats_exists.append(exists)
 
     return any(file_formats_exists)
