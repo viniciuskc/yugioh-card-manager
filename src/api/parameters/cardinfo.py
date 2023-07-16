@@ -1,4 +1,4 @@
-from src.api.definition import Parameter
+from src.api.api import Parameter
 
 card_archetype = Parameter(
     name="archetype",
@@ -191,6 +191,6 @@ card_type = Parameter(
 )
 
 if __name__ == '__main__':
-    print("Attribute: " + card_atk.name + " | Value: " + str(card_atk.value))
+    print("Attribute:", card_atk.name, "| Value:", str(card_atk.value))
     card_atk.value = 3200
-    print("Attribute: " + card_atk.name + " | Value: " + str(card_atk.value))
+    print("Attribute:", card_atk.name, "| Value:", str(card_atk.value))

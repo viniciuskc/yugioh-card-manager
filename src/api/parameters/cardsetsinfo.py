@@ -1,4 +1,4 @@
-from src.api.definition import Parameter
+from src.api.api import Parameter
 
 set_code = Parameter(
     name="setcode",
@@ -9,6 +9,6 @@ set_code = Parameter(
 )
 
 if __name__ == '__main__':
-    print("Attribute: " + set_code.name + " | Value: " + str(set_code.value))
+    print("Attribute:", set_code.name, "| Value:", str(set_code.value))
     set_code.value = "LDK2-ENJ39"
-    print("Attribute: " + set_code.name + " | Value: " + str(set_code.value))
+    print("Attribute:", set_code.name, "| Value:", str(set_code.value))

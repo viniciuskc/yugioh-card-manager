@@ -1,20 +1,20 @@
-from src.data.definition import Column, Dataset
+from src.data.data import Column, Dataset
 
 dataset = Dataset(
     name="price",
     write_mode="append",
     description="Yu-Gi-Oh! card set prices information.",
     columns=[
-        Column("set_code", "string", primary_key=True),
-        Column("set_price", "decimal"),  # TODO: Check best data type (decimal, double, money)
-        Column("set_price_created_at", "timestamp", primary_key=True, description="Timestamp when the card set price "
-                                                                                  "was retrieved.")
+        Column("set_code", ["card_sets", "set_code"], "string", primary_key=True),
+        Column("set_price", ["card_sets", "set_price"], "decimal"),  # TODO: Check best data type (decimal, double, money)
+        Column("set_price_created_at", "datetime", "timestamp", primary_key=True,
+               description="Timestamp when the card set price was retrieved.")
     ]
 )
 
 if __name__ == '__main__':
-    print("Dataset Name: " + dataset.name)
-    print("Description: " + dataset.description)
-    print("Write Mode: " + dataset.write_mode)
-    print("Primary Keys: " + str(dataset.primary_keys()))
-    print("Columns: " + str(dataset.columns()))
+    print("Dataset Name:", dataset.name)
+    print("Description:", dataset.description)
+    print("Write Mode:", dataset.write_mode)
+    print("Primary Keys:", str(dataset.primary_keys()))
+    print("Columns:", str(dataset.columns()))

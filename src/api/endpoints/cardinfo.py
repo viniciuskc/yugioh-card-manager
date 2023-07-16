@@ -1,4 +1,4 @@
-from src.api.definition import Api
+from src.api.api import Api
 from src.api.parameters import cardinfo
 
 api = Api(
@@ -34,15 +34,15 @@ api = Api(
 
 if __name__ == '__main__':
     print("------------------------------------------------------------")
-    print("Method: " + api.method)
-    print("Version: " + api.version)
-    print("URI: " + api.uri())
-    print("All Parameters: " + str(api.parameters()))
+    print("Method:", api.method)
+    print("Version:", api.version)
+    print("URI:", api.uri())
+    print("All Parameters:", str(api.parameters()))
     print("------------------------------------------------------------")
     cardinfo.card_type.value = "Fusion Monster"
     cardinfo.card_attribute.value = "Fire"
     cardinfo.card_race.value = "Dragon"
     cardinfo.card_atk.value = 3500
-    print("Parameters: " + str(api.filled_parameters()))
-    print("Endpoint: " + api.url())
-    print("Response:" + api.request())
+    print("Parameters:", str(api.filled_parameters()))
+    print("Endpoint:", api.url())
+    print("Response:", api.request())

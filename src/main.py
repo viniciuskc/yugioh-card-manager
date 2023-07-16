@@ -1,7 +1,8 @@
 from os import system
-from src.api.definition import get_images_dict
+from src.api.api import get_images_dict
 import search
-import writer
+
+# TODO: File not working, finish refactoring the api definitions and then refactor methods in this file
 
 
 def menu_home():

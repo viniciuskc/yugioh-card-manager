@@ -1,6 +1,5 @@
 from json import dumps, loads
 
-
 # TODO: File not working, finish refactoring the api definitions and then refactor methods in this file
 
 
@@ -59,3 +58,53 @@ def search_random_card():
     print("\nResponse:\n" + dumps(loads(response), indent=2))
 
     return response
+
+# TODO: Refactor all method below inside Parameters classes and delete them
+# TODO: Implement option to clear filled fields
+#
+# def fill_params(params_dict, columns=1):
+#     """Receives a dictionary and performs an interactive loop to fill in the values of its keys."""
+#
+#     exit_fill = False
+#
+#     while not exit_fill:
+#         print_params(params_dict, columns)
+#         print("Filled search endpoints: " + str(get_valid_params(params_dict)) +
+#               "\n\nPress [Enter] to search or enter a field name to fill in.")
+#
+#         param_input = input(f"> ")
+#
+#         if param_input == "":
+#             exit_fill = True
+#
+#         elif param_input in list(params_dict.keys()):
+#             params_dict[param_input] = input("> " + param_input + ": ")
+#
+#         else:
+#             print(f"[ERROR] [{param_input}] option not recognized. Please enter a valid option.")
+#
+#     return get_valid_params(params_dict)
+#
+#
+# def print_params(params_dict, columns=1):
+#     """Receives a dictionary of endpoints and prints its keys tabulated in the specified number of columns."""
+#
+#     print("\nThis API allows to search for a card filtering by the following fields:")
+#
+#     params_keys = list(params_dict.keys())
+#     params_len = len(params_keys)
+#
+#     params_index = 0
+#
+#     while params_index < columns:
+#         column_index = 0
+#         text_to_print = ""
+#
+#         while column_index < params_len:
+#             param = params_keys[params_index + column_index]
+#             indent = 2 - floor(len(param) / 8)
+#             text_to_print += param + ("\t" * indent)
+#             column_index += columns
+#
+#         print(text_to_print)
+#         params_index += 1
