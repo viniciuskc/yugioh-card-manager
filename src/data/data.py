@@ -12,14 +12,14 @@ json_default_folder_name = "data/json/"
 
 
 class Column:
-    def __init__(self, name, response_name, data_type, primary_key=False, nullable=True, array=False, options=None,
+    def __init__(self, name, response_key, data_type, primary_key=False, nullable=True, array=False, options=None,
                  description=None):
 
         if primary_key:
             nullable = False
 
         self.__name = name
-        self.__response_name = response_name
+        self.__response_key = response_key
         self.__data_type = data_type
         self.__primary_key = primary_key
         self.__nullable = nullable
@@ -32,8 +32,8 @@ class Column:
         return self.__name
 
     @property
-    def response_name(self):
-        return self.__response_name
+    def response_key(self):
+        return self.__response_key
 
     @property
     def data_type(self):
@@ -61,9 +61,10 @@ class Column:
 
 
 class Dataset:
-    def __init__(self, name, columns, sort=None, write_mode="append", description=None):
+    def __init__(self, name, columns, nested_key=None, sort=None, write_mode="append", description=None):
         self.__name = name
         self.__columns = columns
+        self.__nested_key = nested_key
         self.__sort = sort
         self.__write_mode = write_mode
         self.__description = description
@@ -96,7 +97,7 @@ class Dataset:
         """Returns a dict with all dataset columns and their equivalent key in the api response."""
         column_dict = dict()
         for column in self.__columns:
-            column_dict[column.name] = column.response_name
+            column_dict[column.name] = column.response_key
         return column_dict
 
     def primary_keys(self):
@@ -125,35 +126,66 @@ class Dataset:
         local_datetime = datetime.fromtimestamp(local_time).strftime("%Y%m%d_%H%M%S")
 
         data = []
-        for item in json_response["data"]:
-            row = dict()
 
+        for item in json_response["data"]:
             item["datetime"] = local_datetime
 
-            for column_name in columns_alias.keys():
+            # Data handling for datasets with more than one row of data inside nested fields
+            if self.__nested_key is not None:
+                row_index = 0
+                len_nested_field = len(item[self.__nested_key])
+            else:
+                row_index = 0
+                len_nested_field = 1
 
-                alias_is_array = isinstance(columns_alias[column_name], abc.Sequence)
-                alias_is_not_string = isinstance(columns_alias[column_name], str)
+            while row_index < len_nested_field:
+                row = dict()
+                for column_name in columns_alias.keys():
 
-                if alias_is_array and not alias_is_not_string:
-                    response_value = None
-                    for alias in columns_alias[column_name]:
-                        if item.get(alias) is not None:
-                            response_value = item[alias]
-                        else:
-                            response_value = None
-                    row[column_name] = response_value
+                    alias_is_not_string = not isinstance(columns_alias[column_name], str)
+                    alias_is_array = isinstance(columns_alias[column_name], abc.Sequence)
 
-                else:
-                    if item.get(columns_alias[column_name]) is not None:
-                        response_value = item[columns_alias[column_name]]
+                    # Data handling for nested fields of the response
+                    if alias_is_not_string and alias_is_array:
+                        len_alias = len(columns_alias[column_name])
+                        item_iterator = item
+                        response_value = None
+
+                        for alias in columns_alias[column_name]:
+                            if item_iterator is not None and item_iterator.get(alias) is not None:
+
+                                item_is_array = isinstance(item_iterator[alias], abc.Sequence)
+                                item_is_not_string = not isinstance(item_iterator[alias], str)
+
+                                # Data handling to get only the first item of a nested field
+                                if item_is_array and item_is_not_string and len_alias > 1:
+                                    item_iterator = item_iterator[alias][row_index]
+
+                                else:
+                                    item_iterator = item_iterator[alias]
+
+                            else:
+                                item_iterator = None
+
+                            response_value = item_iterator
+                            len_alias -= 1
+
                         row[column_name] = response_value
-                    else:
-                        row[column_name] = None
 
-            data.append(row)
+                    # Data handling for non-nested fields of the response
+                    else:
+                        if item.get(columns_alias[column_name]) is not None:
+                            response_value = item[columns_alias[column_name]]
+                            row[column_name] = response_value
+
+                        else:
+                            row[column_name] = None
+
+                data.append(row)
+                row_index += 1
 
         return data
+
 
     def path(self, data_type, folder_name=None):
         """Returns the path of the dataset in the specified format in local files. If a folder is not specified, it
@@ -181,15 +213,15 @@ class Dataset:
         file_path = self.path("csv", folder_name)
 
         if data is not None:
-            print(f"Saving data in csv file locally...")
+            print(f"Saving {self.name} data in csv file locally...")
             if exists(file_path):
                 df = DataFrame.from_records(data)
                 df.to_csv(file_path, mode="a", index=False, header=False)
-                mode_text = "Data appended in csv: "
+                mode_text = f"{self.name.capitalize()} data appended in csv: "
             else:
                 df = DataFrame.from_records(data)
                 df.to_csv(file_path, mode="w", index=False)
-                mode_text = "Csv saved locally as: "
+                mode_text = f"{self.name.capitalize()} csv saved locally as: "
 
             return_text = mode_text + file_path
             print(return_text)
@@ -205,15 +237,15 @@ class Dataset:
         file_path = self.path("json", folder_name)
 
         if data is not None:
-            print("Saving json file locally...")
+            print(f"Saving {self.name} data in json file locally...")
             if exists(file_path):
                 df = DataFrame.from_records(data)
                 df.to_json(file_path, mode="a", lines=True, orient="records")
-                mode_text = "Data appended in json: "
+                mode_text = f"{self.name.capitalize()} data appended in json: "
             else:
                 df = DataFrame.from_records(data)
                 df.to_json(file_path, mode="w", lines=True, orient="records")
-                mode_text = "Json saved locally as: "
+                mode_text = f"{self.name.capitalize()} json saved locally as: "
 
             return_text = mode_text + file_path
             print(return_text)

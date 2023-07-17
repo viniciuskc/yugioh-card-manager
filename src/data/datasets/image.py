@@ -1,7 +1,8 @@
 from src.data.data import Column, Dataset
 
-image = Dataset(
+image_dataset = Dataset(
     name="image",
+    nested_key="card_images",
     write_mode="overwrite",
     description="Yu-Gi-Oh! card images links.",
     columns=[
@@ -14,8 +15,8 @@ image = Dataset(
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", image.name)
-    print("Description:", image.description)
-    print("Write Mode:", image.write_mode)
-    print("Primary Keys:", str(image.primary_keys()))
-    print("Columns:", str(image.columns()))
+    print("Dataset Name:", image_dataset.name)
+    print("Description:", image_dataset.description)
+    print("Write Mode:", image_dataset.write_mode)
+    print("Primary Keys:", str(image_dataset.primary_keys()))
+    print("Columns:", str(image_dataset.columns()))

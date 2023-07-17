@@ -84,8 +84,7 @@ card_language = Parameter(
     name="language",
     data_type="string",
     description="Card language (None: English, 'FR': French, 'DE': German, 'IT': Italian, 'PT': Portuguese).",
-    options=[None, "DE", "FR", "IT", "PT"],
-    default_value="PT"
+    options=[None, "DE", "FR", "IT", "PT"]
 )
 
 card_level = Parameter(
@@ -117,7 +116,8 @@ card_misc = Parameter(
     name="misc",
     data_type="string",
     description="Show additional response info (Card Views, Beta Name, etc). Misc accepts 'Yes'.",
-    options=["Yes"]
+    options=["Yes"],
+    default_value="Yes"
 )
 
 card_name = Parameter(

@@ -1,6 +1,8 @@
 from src.data.data import Column, Dataset
 
-card = Dataset(
+# TODO: Always save english name and desc or save the language of the card
+
+card_dataset = Dataset(
     name="card",
     write_mode="overwrite",
     description="Yu-Gi-Oh! card information.",
@@ -19,15 +21,16 @@ card = Dataset(
         Column("card_scale", "scala", "integer"),
         Column("card_linkval", "linkval", "integer"),
         Column("card_linkmarkers", "linkmarkers", "string", array=True),
-        Column("card_tcg_date", ["misc_info", "card_tcg_date"], "date"),
-        Column("card_ocg_date", ["misc_info", "card_ocg_date"], "date"),
+        Column("card_tcg_date", ["misc_info", "tcg_date"], "date"),
+        Column("card_ocg_date", ["misc_info", "ocg_date"], "date"),
+        Column("card_formats", ["misc_info", "formats"], "string", array=True),
         Column("card_updated_at", "datetime", "timestamp", description="Timestamp of last card information update.")
     ]
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", card.name)
-    print("Description:", card.description)
-    print("Write Mode:", card.write_mode)
-    print("Primary Keys:", str(card.primary_keys()))
-    print("Columns:", str(card.columns()))
+    print("Dataset Name:", card_dataset.name)
+    print("Description:", card_dataset.description)
+    print("Write Mode:", card_dataset.write_mode)
+    print("Primary Keys:", str(card_dataset.primary_keys()))
+    print("Columns:", str(card_dataset.columns()))

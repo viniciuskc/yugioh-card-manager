@@ -15,7 +15,8 @@ default_headers = {'User-Agent': 'Mozilla/6.0'}
 
 class Api:
     def __init__(self, method, resource, protocol=default_protocol, domain=default_domain,
-                 app_context=default_app_context, version=default_version, headers=None, parameters=None):
+                 app_context=default_app_context, version=default_version, headers=None, parameters=None,
+                 description=None):
 
         if headers is None:
             headers = default_headers
@@ -28,14 +29,23 @@ class Api:
         self.__version = version
         self.__headers = headers
         self.__parameters = parameters
+        self.__description = description
 
     @property
     def method(self):
         return self.__method
 
     @property
+    def resource(self):
+        return self.__resource
+
+    @property
     def version(self):
         return self.__version
+
+    @property
+    def description(self):
+        return self.__description
 
     def parameters(self):
         """Returns a list with the name of all parameters of the endpoint."""

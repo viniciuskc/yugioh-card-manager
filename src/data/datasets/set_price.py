@@ -1,7 +1,8 @@
 from src.data.data import Column, Dataset
 
-card_set_price = Dataset(
-    name="price",
+set_price_dataset = Dataset(
+    name="set_price",
+    nested_key="card_sets",
     write_mode="append",
     description="Yu-Gi-Oh! card set prices information.",
     columns=[
@@ -13,8 +14,8 @@ card_set_price = Dataset(
 )
 
 if __name__ == '__main__':
-    print("Dataset Name:", card_set_price.name)
-    print("Description:", card_set_price.description)
-    print("Write Mode:", card_set_price.write_mode)
-    print("Primary Keys:", str(card_set_price.primary_keys()))
-    print("Columns:", str(card_set_price.columns()))
+    print("Dataset Name:", set_price_dataset.name)
+    print("Description:", set_price_dataset.description)
+    print("Write Mode:", set_price_dataset.write_mode)
+    print("Primary Keys:", str(set_price_dataset.primary_keys()))
+    print("Columns:", str(set_price_dataset.columns()))
